@@ -4,13 +4,13 @@ export const createAndUpdate = async (endpoint: string, data: any) => {
         if(data){
             const response = await api.put(`${endpoint}/${data.id}`, data)
             return{
-                message: `${response.data.name} atualizado com sucesso!`,
+                message: `Atualizado com sucesso!`,
                 response: response.data
             } 
         }
         const response =  await api.post(endpoint, data)
         return{
-            message: `${response.data.name} criado com sucesso!`,
+            message: `Criado com sucesso!`,
             response: response.data
         } 
         
