@@ -1,50 +1,27 @@
-# React + TypeScript + Vite
+# CAUSA TECH FRONTEND - MVP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📖 Sobre o Projeto
 
-Currently, two official plugins are available:
+Esse repositório é a interface de um sistema desenvolvido para advogados, oferecendo diversas funcionalidades úteis para facilitar a gestão de processos, clientes e atividades jurídicas. Este projeto é construído utilizando React e está focado em proporcionar uma experiência de usuário fluida e eficiente.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Funcionalidades
 
-## Expanding the ESLint configuration
+🟧 - Em andamento | ✅ - Criado
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+##
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+🟧 Gestão de Processos: Controle e acompanhamento de processos jurídicos. <br/>
+✅ Gerenciamento de Clientes: Cadastro e visualização de clientes.
+<br/>
+🟧 Agenda de Compromissos: Organização de reuniões e prazos importantes.
+<br/>
+🟧 Documentos: Upload, armazenamento e consulta de documentos relacionados
+aos casos.
+<br/>
+🟧 Pesquisa Avançada: Ferramentas de busca eficientes para encontrar informações rapidamente.
+<br/>
+🟧 Dashboard Interativo: Visualização de métricas e relatórios importantes.
+<br/>
+✅ Autenticação: Controle de acesso + Autenticação JWT.
+<br/>
+✅ Exportação de PDF dos contratos.

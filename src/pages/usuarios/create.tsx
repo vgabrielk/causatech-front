@@ -1,19 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
 import {useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {  Response } from "../../services/createAndUpdate";
+
+import React, {useEffect, useState } from "react";
 import api from "../../api/api";
+
 
 
 const CriarUsuario: React.FC = () => {
   const {id} = useParams();
-
+  const [role, setRole] = useState<string>('');
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
+    role: ""
   });
+  
+  const roles = [
+  {
+    value: 'admin',
+    label: 'Administrador'
+  },
+  {
+    value: 'manager',
+    label: 'Gerenciador'
+  },
+  {
+    value: 'user',
+    label: 'Usuário'
+  },
+  ]
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +55,7 @@ const CriarUsuario: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    user.role = role;
       try {
         const response = await api.post("/register",  user) as Response;
         return console.log(response);
@@ -53,7 +72,7 @@ const CriarUsuario: React.FC = () => {
   return (
     <Box
       sx={{
-        maxWidth: 500,
+        maxWidth: '100%',
         padding: 2,
       }}
     >
@@ -69,6 +88,7 @@ const CriarUsuario: React.FC = () => {
           fullWidth
           margin="normal"
           required
+          variant="outlined"
         />
         <TextField
           label="E-mail"
@@ -78,6 +98,7 @@ const CriarUsuario: React.FC = () => {
           fullWidth
           margin="normal"
           required
+          variant="outlined"
         />
          <TextField
           label="Senha"
@@ -87,9 +108,18 @@ const CriarUsuario: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
+          variant="outlined"
           required
         />
-        
+        <Select fullWidth sx={{marginTop: 2}} label="Selecione o tipo do usuário"
+        onChange={(e: SelectChangeEvent) => setRole(e.target.value)}
+        >
+        {roles?.map((role: any) => (
+            <MenuItem key={role.value} value={role.value}>
+              {role.label}
+            </MenuItem>
+          ))}
+        </Select>        
         <Box sx={{ mt: 2 }}>
           <Button variant="contained" color="primary" type="submit">
             {id ? "Editar" : "Criar"} Usuário

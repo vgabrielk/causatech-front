@@ -32,7 +32,7 @@ export default function DashboardLayoutBasic(props: any) {
         router={router}
         theme={theme}
         window={layoutWindow}
-        branding={{ title: "E-Contratos" }}
+        branding={{ title: "CausaTech" }}
       >
         <DashboardLayout sx={{ width: "100%" }}>
           <div style={{ padding: 20 }}>

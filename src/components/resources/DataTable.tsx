@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { DataTableProps } from "../types/interfaces/DataTableProps";
-import { Column } from "../types/interfaces/Column";
+import { DataTableProps } from "../../interfaces/DataTableProps";
+import { Column } from "../../interfaces/Column";
 
 import { DataGrid, GridAddIcon, GridColDef } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import api from "../api/api";
+import api from "../../api/api";
 
 export default function DataTable({ columns, endpoint, adjustRow }: DataTableProps) {
   const [data, setData] = useState<Column[] | any>([]);
