@@ -1,20 +1,19 @@
-import { Button, Card, Divider, Grid, IconButton, InputAdornment, OutlinedInput, TextField } from "@mui/material";
+import { Button, Card, Grid, IconButton, InputAdornment, OutlinedInput, TextField } from "@mui/material";
 import { useState } from "react";
 import api from "../../../api/api";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuth } from "../../../context/AuthContext";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 
-export default function LoginPage() {
+export default function RegisterPage() {
 
     const [email, setEmail] = useState();
+    const [name, setName] = useState();
     const [password, setPassword] = useState();
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
-    const auth = useAuth();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -26,33 +25,40 @@ export default function LoginPage() {
       event.preventDefault();
     };
 
-    const login = async (e: any) => {
+    const register = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await api.post('/login', {email: email, password: password});
+            const response = await api.post('/register', {name: name, email: email, password: password});
             console.log(response)
-            localStorage.setItem('token',response.data.token)
-            toast.success('Logado com sucesso');
+            toast.success('Registrado com sucesso');
             
             setTimeout(() => {
-                if(response.status == 200) {
-                    return  navigate('/')
+                if(response.status == 201) {
+                    return  navigate('/login')
                 }
             },1000)
-            auth.isAuthenticated = true;
-
             return;
         } catch (error) {
+            console.log(error);
+            
             if (error instanceof Error) {
+              const errors = (error as any)?.response?.data?.errors;
+          
+              if (errors) {
+                Object.keys(errors).forEach((field) => {
+                  toast.error(`${errors[field]}`);
+                });
+              } else {
                 const errorMessage =
                   (error as any)?.response?.data?.error ||
                   error.message ||
                   "Erro inesperado";
                 toast.error(errorMessage);
-              } else {
-                toast.error("Erro inesperado");
               }
-        }
+            } else {
+              toast.error("Erro inesperado");
+            }
+          }
     }
 
     
@@ -62,8 +68,17 @@ export default function LoginPage() {
               
           <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Card sx={{ width: '100%', maxWidth: 400, padding: 3, backgroundColor: 'transparent' }} elevation={0}>
-              <form onSubmit={login} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <h1 style={{ textAlign: 'center' }}>Faça login</h1>
+              <form onSubmit={register} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                
+                <h1 style={{ textAlign: 'center' }}>Criar sua conta</h1>
+                <TextField
+                  required
+                  name="name"
+                  placeholder="Digite seu nome"
+                  label="Nome"
+                  onChange={(e: any) => setName(e.target.value)}
+                  value={name}
+                />
                 <TextField
                   required
                   name="email"
@@ -93,8 +108,9 @@ export default function LoginPage() {
                     </InputAdornment>
                   }
                 />
-                <Button type="submit" variant="contained">Login</Button>
-                <Link to='/register'>Não tem uma conta? Registrar</Link>
+                <Button type="submit" variant="contained">Registrar</Button>
+                <Link to='/login'>Fazer login</Link>
+
               </form>
             </Card>
           </Grid>
