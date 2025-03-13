@@ -14,14 +14,19 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem("auth") === "true";
+    const storedAuth = localStorage.getItem("auth");
+    return storedAuth === "true";   
   });
 
   useEffect(() => {
     localStorage.setItem("auth", String(isAuthenticated));
   }, [isAuthenticated]);
 
-  const login = () => setIsAuthenticated(true);
+  const login = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem("auth", "true");
+  };
+
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("auth");
