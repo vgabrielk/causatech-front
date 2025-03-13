@@ -11,6 +11,7 @@ import { DocumentScannerRounded, HomeRounded, LogoutRounded, Person } from "@mui
 import { useAuth } from "../context/AuthContext";  
 import React from "react";
 import Logout from "../pages/logout";
+import RegisterPage from "../pages/auth/register";
 
 const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -87,6 +88,7 @@ const router = createBrowserRouter([
   },
   { path: "/*", element: <NotFound /> },
   { path: "/login", element: <PublicRoute element={<LoginPage />} /> },  
+  { path: "/register", element: <PublicRoute element={<RegisterPage />} /> },  
 ]);
 
 export default router;
