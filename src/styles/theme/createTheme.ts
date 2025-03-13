@@ -1,9 +1,10 @@
 import { createTheme } from "@mui/material";
 
 export const theme = createTheme({
+  colorSchemes: { light: true, dark: false },
   palette: {
     primary: {
-      main: "#2C3E50",  
+      main: "#0d214F",  
     },
     secondary: {
       main: "#E67E22",  
@@ -13,7 +14,7 @@ export const theme = createTheme({
       paper: "#FFFFFF",  
     },
     text: {
-      primary: "#34495E",  
+      primary: "#0d214F",  
       secondary: "#7F8C8D", 
     },
     error: {
