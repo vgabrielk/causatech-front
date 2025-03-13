@@ -7,9 +7,10 @@ import Usuarios from "../pages/usuarios";
 import Contratos from "../pages/contratos";
 import CriarContrato from "../pages/contratos/create";
 import NotFound from "../pages/not-found";
-import { DocumentScannerRounded, HomeRounded, LocalPolice, Person } from "@mui/icons-material";
+import { DocumentScannerRounded, HomeRounded, LogoutRounded, Person } from "@mui/icons-material";
 import { useAuth } from "../context/AuthContext";  
 import React from "react";
+import Logout from "../pages/logout";
 
 const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -51,8 +52,18 @@ export const childrenRoutes = [
     showInSidebar: true, 
     icon: <DocumentScannerRounded fontSize="large" color="primary" />
   },
+  { 
+    segment: "logout", 
+    kind: "logout", 
+    path: "/logout", 
+    element: <ProtectedRoute element={<Logout />} />, 
+    title: "Sair", 
+    showInSidebar: true, 
+    icon: <LogoutRounded fontSize="large" color="primary" />
+  },
   { path: "/contratos/add", element: <ProtectedRoute element={<CriarContrato />} />, title: "Criar Contrato" },
   { path: "/contratos/edit/:id", element: <ProtectedRoute element={<CriarContrato />} />, title: "Editar Contrato" },
+
   // { Processos
   //   segment: "processos", 
   //   kind: "process", 
