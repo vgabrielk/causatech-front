@@ -50,7 +50,7 @@ export default function LoginPage() {
   return (
     <Card sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
     <form onSubmit={login} style={{ width: "100%", maxWidth: 400, display: "flex", flexDirection: 'column', gap: '20px' }}>
-        <img src="/logo.png" width="200px" style={{margin: '0 auto'}} />
+        <h1 style={{textAlign: 'center'}}>Causa tech</h1>
         <TextField
             required
             name="email"
