@@ -14,6 +14,10 @@ const CriarCliente: React.FC = () => {
   const [cliente, setCliente] = useState({
     nome: "",
     cpf: "",
+    rg: "",
+    email: "",
+    telefone: "",
+    endereco: "",
   });
   
 
@@ -72,6 +76,47 @@ const CriarCliente: React.FC = () => {
           label="CPF"
           name="cpf"
           value={cliente.cpf}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+          variant="outlined"
+        />
+         <TextField
+          label="Registro geral"
+          name="rg"
+          value={cliente.rg}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+          variant="outlined"
+        />
+         <TextField
+          label="Telefone"
+          name="telefone"
+          value={cliente.telefone}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+          variant="outlined"
+          type="phone"
+        />
+         <TextField
+          label="Endereço"
+          name="endereco"
+          value={cliente.endereco}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+          variant="outlined"
+        />
+        <TextField
+          label="E-mail"
+          name="email"
+          value={cliente.email}
           onChange={handleChange}
           fullWidth
           margin="normal"
