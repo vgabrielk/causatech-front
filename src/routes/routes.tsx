@@ -7,11 +7,13 @@ import Usuarios from "../pages/usuarios";
 import Contratos from "../pages/contratos";
 import CriarContrato from "../pages/contratos/create";
 import NotFound from "../pages/not-found";
-import { DocumentScannerRounded, HomeRounded, LogoutRounded, Person } from "@mui/icons-material";
+import { DocumentScannerRounded, EmojiPeople, Gavel, HomeRounded, LogoutRounded, Person } from "@mui/icons-material";
 import { useAuth } from "../context/AuthContext";  
 import React from "react";
 import Logout from "../pages/logout";
 import RegisterPage from "../pages/auth/register";
+import Clientes from "../pages/clientes";
+import CriarCliente from "../pages/clientes/create";
 
 const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -53,6 +55,17 @@ export const childrenRoutes = [
     showInSidebar: true, 
     icon: <DocumentScannerRounded fontSize="large" color="primary" />
   },
+  { 
+    segment: "clientes", 
+    kind: "clientes", 
+    path: "/clientes", 
+    element: <ProtectedRoute element={<Clientes/>} />, 
+    title: "Clientes", 
+    showInSidebar: true, 
+    icon: <EmojiPeople fontSize="large" color="primary" />
+  },
+  { path: "/clientes/add", element: <ProtectedRoute element={<CriarCliente />} />, title: "Criar Cliente" },
+  { path: "/clientes/edit/:id", element: <ProtectedRoute element={<CriarCliente />} />, title: "Editar Cliente" },
   { 
     segment: "logout", 
     kind: "logout", 
