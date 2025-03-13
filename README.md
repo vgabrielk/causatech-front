@@ -1,4 +1,4 @@
-# CAUSA TECH FRONTEND - MVP
+# CAUSA TECH - FRONTEND 
 
 ## 📖 Sobre o Projeto
 
@@ -25,3 +25,6 @@ aos casos.
 ✅ Autenticação: Controle de acesso + Autenticação JWT.
 <br/>
 ✅ Exportação de PDF dos contratos.
+
+
+OBS: O .env está no repositório propositalmente por enquanto, pois não contém nenhuma informação sensível.
