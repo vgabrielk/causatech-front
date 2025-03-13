@@ -4,7 +4,6 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { childrenRoutes } from "../routes/routes";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { theme } from "../styles/theme/createTheme";
-import { AuthProvider } from "../context/AuthContext";
 
 function useLayoutRouter(): Router {
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ export default function DashboardLayoutBasic(props: any) {
         router={router}
         theme={theme}
         window={layoutWindow}
-        branding={{ title: "CausaTech" }}
+        branding={{ title: "CausaTech", homeUrl: "/" }}
       >
         <DashboardLayout sx={{ width: "100%" }}>
           <div style={{ padding: 20 }}>
