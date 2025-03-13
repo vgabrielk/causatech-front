@@ -2,7 +2,7 @@ import React, {useEffect, useState } from "react";
 import { Box, Button, MenuItem, TextField, Typography, Select } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Product } from "../../types/interfaces/Products";
+import { Product } from "../../interfaces/Products";
 import { createAndUpdate, Response } from "../../services/createAndUpdate";
 import api from "../../api/api";
 

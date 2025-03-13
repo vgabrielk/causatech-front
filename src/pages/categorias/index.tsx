@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import { Column } from "../../types/interfaces/Column";
-import DataTable from "../../components/DataTable";
+import { Column } from "../../interfaces/Column";
+import DataTable from "../../components/resources/DataTable";
 
 export default function Categorias() {
 
