@@ -1,7 +1,7 @@
 import api from "../api/api";
 export const createAndUpdate = async (endpoint: string, data: any) => {
     try {
-        if(data){
+        if(data.id){
             const response = await api.put(`${endpoint}/${data.id}`, data)
             return{
                 message: `Atualizado com sucesso!`,
