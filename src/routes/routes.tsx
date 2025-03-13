@@ -14,6 +14,8 @@ import Logout from "../pages/logout";
 import RegisterPage from "../pages/auth/register";
 import Clientes from "../pages/clientes";
 import CriarCliente from "../pages/clientes/create";
+import CriarAdvogado from "../pages/advogados/create";
+import Advogados from "../pages/advogados";
 
 const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -66,6 +68,17 @@ export const childrenRoutes = [
   },
   { path: "/clientes/add", element: <ProtectedRoute element={<CriarCliente />} />, title: "Criar Cliente" },
   { path: "/clientes/edit/:id", element: <ProtectedRoute element={<CriarCliente />} />, title: "Editar Cliente" },
+  { 
+    segment: "advogados", 
+    kind: "advogados", 
+    path: "/advogados", 
+    element: <ProtectedRoute element={<Advogados/>} />, 
+    title: "Advogados", 
+    showInSidebar: true, 
+    icon: <Gavel fontSize="large" color="primary" />
+  },
+  { path: "/advogados/add", element: <ProtectedRoute element={<CriarAdvogado />} />, title: "Criar Advogado" },
+  { path: "/advogados/edit/:id", element: <ProtectedRoute element={<CriarAdvogado />} />, title: "Editar Advogado" },
   { 
     segment: "logout", 
     kind: "logout", 
