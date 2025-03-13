@@ -39,7 +39,7 @@ export default function LoginPage() {
                     return  navigate('/')
                 }
             },1000)
-            auth.isAuthenticated = true;
+            auth.login();
 
             return;
         } catch (error) {
