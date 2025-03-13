@@ -43,10 +43,19 @@ export default function LoginPage() {
 
             return;
         } catch (error) {
-            console.log(error);
+            if (error instanceof Error) {
+                const errorMessage =
+                  (error as any)?.response?.data?.error ||
+                  error.message ||
+                  "Erro inesperado";
+                toast.error(errorMessage);
+              } else {
+                toast.error("Erro inesperado");
+              }
         }
     }
 
+    
   return (
     <Card sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
     <form onSubmit={login} style={{ width: "100%", maxWidth: 400, display: "flex", flexDirection: 'column', gap: '20px' }}>
