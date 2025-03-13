@@ -10,7 +10,6 @@ import api from "../../api/api";
 
 const CriarCliente: React.FC = () => {
   const {id} = useParams();
-  const [role, setRole] = useState<string>('');
   const [cliente, setCliente] = useState({
     nome: "",
     cpf: "",
