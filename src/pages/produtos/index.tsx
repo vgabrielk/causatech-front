@@ -1,5 +1,6 @@
 import { Column } from "../../interfaces/Column";
 import DataTable from "../../components/resources/DataTable";
+import { Box } from "@mui/material";
 
 export default function Produtos() {
 
@@ -11,11 +12,7 @@ export default function Produtos() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <DataTable columns={columns} endpoint="/products"  transformRowBeforeUpdate={(row) => ({
-    ...row,
-    companyId: row?.company?.id || null,
-    categoryId: row?.category?.id || null,
-  })}/>
+      <DataTable columns={columns} endpoint="/products" />
     </Box>
   );
 }

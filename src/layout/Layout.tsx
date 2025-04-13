@@ -1,9 +1,10 @@
 import * as React from "react";
-import { AppProvider, Router } from "@toolpad/core/AppProvider";
+import { AppProvider, Router, type Session } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { childrenRoutes } from "../routes/routes";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { theme } from "../styles/theme/createTheme";
+import { useAuth } from "../context/AuthContext";
 
 function useLayoutRouter(): Router {
   const navigate = useNavigate();
@@ -20,10 +21,34 @@ export default function DashboardLayoutBasic(props: any) {
   const filteredNavigation = React.useMemo(() => {
     return childrenRoutes?.filter((item) => item?.showInSidebar) || [];
   }, []);
+
+  const demoSession = {
+    user: {
+      name: 'Bharat Kashyap',
+      email: 'bharatkashyap@outlook.com',
+      image: 'https://avatars.githubusercontent.com/u/19550456',
+    },
+  };
+
   const { window } = props;
   const router = useLayoutRouter();
+  const auth = useAuth();
 
   const layoutWindow = window ? window() : undefined;
+  const [session, setSession] = React.useState<Session | null>(demoSession);
+
+
+  const authentication = React.useMemo(() => {
+    return {
+      signIn: () => {
+        setSession(demoSession);
+      },
+      signOut: () => {
+        auth.logout();
+      },
+    };
+  }, []);
+
 
   return (
       <AppProvider
@@ -31,7 +56,9 @@ export default function DashboardLayoutBasic(props: any) {
         router={router}
         theme={theme}
         window={layoutWindow}
-        branding={{ title: "CausaTech", homeUrl: "/", logo: "" }}
+        session={demoSession}
+        authentication={authentication}
+        branding={{ homeUrl: "/", title: "Causa tech", logo:  "" }}
       >
         <DashboardLayout sx={{ width: "100%" }}>
           <div style={{ padding: 20 }}>

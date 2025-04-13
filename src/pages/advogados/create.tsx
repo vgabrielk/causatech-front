@@ -5,6 +5,7 @@ import {  createAndUpdate, Response } from "../../services/createAndUpdate";
 
 import React, {useEffect, useState } from "react";
 import api from "../../api/api";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 
 
@@ -16,7 +17,7 @@ const CriarAdvogado: React.FC = () => {
     estado_oab: "",
   });
   
-
+  const notifications = useNotifications();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,9 +39,15 @@ const CriarAdvogado: React.FC = () => {
         let response : Response = {message: "", response: {}} ;
         response = await createAndUpdate("/advogados",  advogado) as Response;
         if(response.type === "error"){  
-          return toast.error(response?.message)
+          notifications.show(response.message, {
+            severity: 'error',
+            autoHideDuration: 2000,
+          });
         }
-        return toast.success(response?.message)
+        return notifications.show(response?.message, {
+          severity: 'success',
+          autoHideDuration: 2000,
+        });
   };
 
   useEffect(() => {

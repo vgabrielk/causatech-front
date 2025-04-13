@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
   table: {
-    display: 'table',
+    display: 'flex',
     width: '100%',
     marginTop: 10,
     marginBottom: 10,

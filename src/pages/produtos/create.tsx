@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Product } from "../../interfaces/Products";
 import { createAndUpdate, Response } from "../../services/createAndUpdate";
 import api from "../../api/api";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 const CriarProduto: React.FC = () => {
   const { id } = useParams();
@@ -18,6 +19,9 @@ const CriarProduto: React.FC = () => {
 
   const [companies, setCompanies] = useState([]);
   const [categories, setCategories] = useState([]);
+
+    const notifications = useNotifications()
+  
 
   const getEmpresas = async () => {
     const response = await api.get("companies");
@@ -54,9 +58,15 @@ const CriarProduto: React.FC = () => {
     let response: Response = { message: "", response: {} };
     response = (await createAndUpdate("/products", product)) as Response;
     if (response.type === "error") {
-      return toast.error(response?.message);
+      return notifications.show(response.message, {
+        severity: 'error',
+        autoHideDuration: 2000,
+      });
     }
-    return toast.success(response?.message);
+    notifications.show(response.message, {
+      severity: 'success',
+      autoHideDuration: 2000,
+    });
   };
 
   useEffect(() => {

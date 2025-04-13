@@ -4,7 +4,7 @@ export const theme = createTheme({
   colorSchemes: { light: true, dark: false },
   palette: {
     primary: {
-      main: "#0d214F",  
+      main: "#228BE6",  
     },
     secondary: {
       main: "#E67E22",  
@@ -14,7 +14,7 @@ export const theme = createTheme({
       paper: "#FFFFFF",  
     },
     text: {
-      primary: "#0d214F",  
+      primary: "#6C757D",  
       secondary: "#7F8C8D", 
     },
     error: {

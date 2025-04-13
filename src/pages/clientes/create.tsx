@@ -5,6 +5,7 @@ import {  createAndUpdate, Response } from "../../services/createAndUpdate";
 
 import React, {useEffect, useState } from "react";
 import api from "../../api/api";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 
 
@@ -19,6 +20,7 @@ const CriarCliente: React.FC = () => {
     endereco: "",
   });
   
+  const notifications = useNotifications()
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,9 +43,15 @@ const CriarCliente: React.FC = () => {
         let response : Response = {message: "", response: {}} ;
         response = await createAndUpdate("/clientes",  cliente) as Response;
         if(response.type === "error"){  
-          return toast.error(response?.message)
+          notifications.show(response.message, {
+            severity: 'error',
+            autoHideDuration: 2000,
+          });
         }
-        return toast.success(response?.message)
+        notifications.show(response.message, {
+          severity: 'success',
+          autoHideDuration: 2000,
+        });
   };
 
   useEffect(() => {

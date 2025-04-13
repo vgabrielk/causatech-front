@@ -4,6 +4,7 @@ import api from "../../../api/api";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 
 export default function RegisterPage() {
@@ -13,8 +14,9 @@ export default function RegisterPage() {
     const [password, setPassword] = useState();
     const [showPassword, setShowPassword] = useState(false);
 
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
+    const notifications = useNotifications();
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -30,7 +32,10 @@ export default function RegisterPage() {
         try {
             const response = await api.post('/register', {name: name, email: email, password: password});
             console.log(response)
-            toast.success('Registrado com sucesso');
+            notifications.show("Registrado com sucesso!", {
+              severity: 'success',
+              autoHideDuration: 2000,
+            });
             
             setTimeout(() => {
                 if(response.status == 201) {
@@ -46,17 +51,30 @@ export default function RegisterPage() {
           
               if (errors) {
                 Object.keys(errors).forEach((field) => {
-                  toast.error(`${errors[field]}`);
+                  notifications.show(errors[field], {
+                    severity: 'error',
+                    autoHideDuration: 2000,
+                  });
+                  notifications.show(errors[field], {
+                    severity: 'error',
+                    autoHideDuration: 2000,
+                  });
                 });
               } else {
                 const errorMessage =
                   (error as any)?.response?.data?.error ||
                   error.message ||
                   "Erro inesperado";
-                toast.error(errorMessage);
+                  notifications.show(errorMessage, {
+                    severity: 'error',
+                    autoHideDuration: 2000,
+                  });
               }
             } else {
-              toast.error("Erro inesperado");
+              notifications.show("Erro inesperado", {
+                severity: 'error',
+                autoHideDuration: 2000,
+              });
             }
           }
     }

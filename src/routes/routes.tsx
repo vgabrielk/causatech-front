@@ -7,7 +7,7 @@ import Usuarios from "../pages/usuarios";
 import Contratos from "../pages/contratos";
 import CriarContrato from "../pages/contratos/create";
 import NotFound from "../pages/not-found";
-import { DocumentScannerRounded, EmojiPeople, Gavel, HomeRounded, LogoutRounded, Person } from "@mui/icons-material";
+import { AdminPanelSettings, DocumentScannerRounded, EmojiPeople, Gavel, HomeRounded, LogoutRounded, Person, Search } from "@mui/icons-material";
 import { useAuth } from "../context/AuthContext";  
 import React from "react";
 import Logout from "../pages/logout";
@@ -16,6 +16,8 @@ import Clientes from "../pages/clientes";
 import CriarCliente from "../pages/clientes/create";
 import CriarAdvogado from "../pages/advogados/create";
 import Advogados from "../pages/advogados";
+import ConsultarProcessos from "../pages/consultar-processos";
+import { title } from "process";
 
 const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -37,17 +39,27 @@ export const childrenRoutes = [
     showInSidebar: true, 
     icon: <HomeRounded fontSize="large" color="primary" />
   },
-  { 
-    segment: "usuarios", 
-    kind: "users", 
-    path: "/usuarios", 
-    element: <ProtectedRoute element={<Usuarios />} />, 
-    title: "Usuários", 
+  {
+    segment: "admin", 
+    kind: "admin", 
+    title: "Administrativo", 
     showInSidebar: true, 
-    icon: <Person fontSize="large" color="primary" />  
+    icon: <AdminPanelSettings fontSize="large" color="primary" />,
+    children: [
+      { 
+        segment: "usuarios", 
+        kind: "users", 
+        path: "/admin/usuarios", 
+        element: <ProtectedRoute element={<Usuarios />} />, 
+        title: "Usuários", 
+        showInSidebar: true, 
+        icon: <Person fontSize="large" color="primary" />,
+      }
+      
+    ]
   },
-  { path: "/usuarios/add", element: <ProtectedRoute element={<CriarUsuario />} />, title: "Criar usuário" },
-  { path: "/usuarios/edit/:id", element: <ProtectedRoute element={<CriarUsuario />} />, title: "Editar usuário" },
+  { path: "/admin/usuarios/add", element: <ProtectedRoute element={<CriarUsuario />} />, title: "Criar usuário" },
+  { path: "/admin/usuarios/edit/:id", element: <ProtectedRoute element={<CriarUsuario />} />, title: "Editar usuário"},
   { 
     segment: "contratos", 
     kind: "contracts", 
@@ -79,15 +91,7 @@ export const childrenRoutes = [
   },
   { path: "/advogados/add", element: <ProtectedRoute element={<CriarAdvogado />} />, title: "Criar Advogado" },
   { path: "/advogados/edit/:id", element: <ProtectedRoute element={<CriarAdvogado />} />, title: "Editar Advogado" },
-  { 
-    segment: "logout", 
-    kind: "logout", 
-    path: "/logout", 
-    element: <ProtectedRoute element={<Logout />} />, 
-    title: "Sair", 
-    showInSidebar: true, 
-    icon: <LogoutRounded fontSize="large" color="primary" />
-  },
+  { path: "/consultar", element: <ProtectedRoute element={<ConsultarProcessos />} />, title: "Consultar processos", showInSidebar: true, segment: 'consultar', kind: 'consultar', icon: <Search fontSize="large" color="primary" /> },
   { path: "/contratos/add", element: <ProtectedRoute element={<CriarContrato />} />, title: "Criar Contrato" },
   { path: "/contratos/edit/:id", element: <ProtectedRoute element={<CriarContrato />} />, title: "Editar Contrato" },
 

@@ -5,20 +5,28 @@ import { FormEvent } from "react";
 import { ContratosPDF } from "../../pages/contratos/contratos-pdf";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useNotifications } from '@toolpad/core/useNotifications';
+
 import api from "../../api/api";
 
 export default function TabButtons({ setTabIndex, tabIndex, contract, id }) {
   const navigate = useNavigate();
-
+const notifications = useNotifications();
   const handleSubmit = async (e: FormEvent<Element>) => {
     e.preventDefault();
     try {
       if (id) {
         (await api.put(`/contracts/${id}`, contract)) as Response;
-        toast.success("Atualizado com sucesso!");
+        notifications.show("Atualizado com sucesso!", {
+          severity: 'success',
+          autoHideDuration: 2000,
+        });
       } else {
         (await api.post("/contracts", contract)) as Response;
-        toast.success("Cadastrado com sucesso!");
+        notifications.show("Cadastrado com sucesso!", {
+          severity: 'success',
+          autoHideDuration: 2000,
+        });
         navigate("/contratos");
       }
     } catch (error: unknown) {
@@ -27,9 +35,15 @@ export default function TabButtons({ setTabIndex, tabIndex, contract, id }) {
           (error as any)?.response?.data?.message ||
           error.message ||
           "Erro inesperado";
-        toast.error(errorMessage);
+          notifications.show(errorMessage, {
+            severity: 'error',
+            autoHideDuration: 2000,
+          });
       } else {
-        toast.error("Erro inesperado");
+        notifications.show("Erro inesperado", {
+          severity: 'error',
+          autoHideDuration: 2000,
+        });
       }
     }
   };

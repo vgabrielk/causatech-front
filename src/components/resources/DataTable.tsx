@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import api from "../../api/api";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 export default function DataTable({ columns, endpoint, adjustRow }: DataTableProps) {
   const [data, setData] = useState<Column[] | any>([]);
@@ -19,6 +20,9 @@ export default function DataTable({ columns, endpoint, adjustRow }: DataTablePro
   const redirectToEditPage = (id: string) => {
     navigate(`edit/${id}`);
   };
+
+  const notifications = useNotifications()
+  
 
   const redirectToCreatePage = () => {
     navigate(`add`);
@@ -51,10 +55,16 @@ export default function DataTable({ columns, endpoint, adjustRow }: DataTablePro
       );
       setData(removedRows);
       setSelectedRows([]);
-      toast.success("Item(s) excluído(s) com sucesso!");
+      notifications.show("Items excluídos com sucesso!", {
+        severity: 'success',
+        autoHideDuration: 2000,
+      });
     } catch (error) {
       console.error("Erro ao excluir:", error);
-      toast.error("Erro ao excluir item(s)!");
+      notifications.show("Erro ao excluir ítens", {
+        severity: 'error',
+        autoHideDuration: 2000,
+      });
     }
   };
 

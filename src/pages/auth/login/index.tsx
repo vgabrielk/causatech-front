@@ -5,16 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../context/AuthContext";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNotifications } from "@toolpad/core/useNotifications";
+import { User } from "../../../interfaces/User";
 
 
 export default function LoginPage() {
 
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
     const auth = useAuth();
+    const notifications = useNotifications();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -26,33 +29,15 @@ export default function LoginPage() {
       event.preventDefault();
     };
 
-    const login = async (e: any) => {
-        e.preventDefault();
-        try {
-            const response = await api.post('/login', {email: email, password: password});
-            console.log(response)
-            localStorage.setItem('token',response.data.token)
-            toast.success('Logado com sucesso');
-            
-            setTimeout(() => {
-                if(response.status == 200) {
-                    return  navigate('/')
-                }
-            },1000)
-            auth.login();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault(); 
+      const user: User = { email, password };
+      await auth.login(user);
+    };
 
-            return;
-        } catch (error) {
-            if (error instanceof Error) {
-                const errorMessage =
-                  (error as any)?.response?.data?.error ||
-                  error.message ||
-                  "Erro inesperado";
-                toast.error(errorMessage);
-              } else {
-                toast.error("Erro inesperado");
-              }
-        }
+    const user = {
+      email:email,
+      password: password
     }
 
     
@@ -62,7 +47,7 @@ export default function LoginPage() {
               
           <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Card sx={{ width: '100%', maxWidth: 400, padding: 3, backgroundColor: 'transparent' }} elevation={0}>
-              <form onSubmit={login} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <h1 style={{ textAlign: 'center' }}>Faça login</h1>
                 <TextField
                   required

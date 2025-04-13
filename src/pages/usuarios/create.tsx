@@ -48,7 +48,6 @@ const CriarUsuario: React.FC = () => {
       const response = await api.get(`/user`)
       console.log(response)
       setUser(response.data);
-      toast.error('Você não pode alterar um usuário!')
     }
     return;
   }

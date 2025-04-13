@@ -4,6 +4,7 @@ import {useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createAndUpdate, Response } from "../../services/createAndUpdate";
 import api from "../../api/api";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 
 const CriarCategoria: React.FC = () => {
@@ -23,6 +24,8 @@ const CriarCategoria: React.FC = () => {
     }));
   };
 
+  const notifications = useNotifications()
+
 
   const getCategoria = async () => {
     const response = await api.get(`categories/${id}`)
@@ -35,9 +38,15 @@ const CriarCategoria: React.FC = () => {
         let response : Response = {message: "", response: {}} ;
         response = await createAndUpdate("/categories",  category) as Response;
         if(response.type === "error"){  
-          return toast.error(response?.message)
+          notifications.show(response.message, {
+            severity: 'error',
+            autoHideDuration: 2000,
+          });
         }
-        return toast.success(response?.message)
+        return notifications.show(response.message, {
+          severity: 'success',
+          autoHideDuration: 2000,
+        });
   };
 
   useEffect(() => {
