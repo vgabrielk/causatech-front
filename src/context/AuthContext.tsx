@@ -4,7 +4,7 @@ import api from "../api/api";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (user?: User) => Promise<void>;
+  login: (user: User) => void;
   logout: () => void;
 }
 
