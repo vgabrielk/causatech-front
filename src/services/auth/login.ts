@@ -16,7 +16,6 @@ const login = async (e: any, email: string, password: string, notifications: any
                 return  window.location.href = '/'
             }
         },1000)
-        auth.login();
 
         return;
     } catch (error) {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AppProvider, Router, type Session } from "@toolpad/core/AppProvider";
+import { AppProvider, NavigationItem, Router, type Session } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { childrenRoutes } from "../routes/routes";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -52,7 +52,7 @@ export default function DashboardLayoutBasic(props: any) {
 
   return (
       <AppProvider
-        navigation={filteredNavigation}
+        navigation={filteredNavigation as NavigationItem[]}
         router={router}
         theme={theme}
         window={layoutWindow}

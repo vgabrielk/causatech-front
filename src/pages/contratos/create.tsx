@@ -112,7 +112,7 @@ const CriarContrato: React.FC = () => {
     if (user) {
       setContract((prevContract) => ({
         ...prevContract,
-        user_id: user.id,
+        user_id: user?.id ?? null, 
       }));
       getContract();
     }
