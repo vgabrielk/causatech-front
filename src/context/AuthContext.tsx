@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
       console.log(response);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(user));
 
       setTimeout(() => {
         if (response.status == 200) {

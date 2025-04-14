@@ -18,14 +18,15 @@ function useLayoutRouter(): Router {
 }
 
 export default function DashboardLayoutBasic(props: any) {
+  const user =  JSON.parse(localStorage.getItem("user") || '{}');  
+
   const filteredNavigation = React.useMemo(() => {
     return childrenRoutes?.filter((item) => item?.showInSidebar) || [];
   }, []);
 
   const demoSession = {
     user: {
-      name: 'Bharat Kashyap',
-      email: 'bharatkashyap@outlook.com',
+      name: user?.email,
       image: 'https://avatars.githubusercontent.com/u/19550456',
     },
   };
