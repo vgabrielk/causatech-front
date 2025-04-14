@@ -1,11 +1,4 @@
-# netlify.toml
-[build]
-  command = "yarn build"  # ou "npm run build"
-  publish = "dist"
-
-[dev]
-  command = "yarn dev"
-  port = 5173
-
-[context.production.environment]
-  VITE_API_URL = "https://causatech-back-production.up.railway.app"  # ou outro valor da API se necessário
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 200
