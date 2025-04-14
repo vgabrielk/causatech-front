@@ -8,7 +8,6 @@ export default function Logout() {
     useEffect( () => {
        logout()
        auth.logout();
-       window.location.href=""
     },[])
     return (
         <></>

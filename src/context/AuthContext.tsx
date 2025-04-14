@@ -77,7 +77,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await api.post('/logout');
     setIsAuthenticated(false);
     localStorage.removeItem("auth");
-    window.location.href=""
   };
   const clearFormErrors = () => {
     setGeneralError('');
