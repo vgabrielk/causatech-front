@@ -1,11 +1,12 @@
 import { Box, Button, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
-import {useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {  createAndUpdate, Response } from "../../services/createAndUpdate";
 
 import React, {useEffect, useState } from "react";
 import api from "../../api/api";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { validateForm } from "./validation";
 
 
 
@@ -16,6 +17,8 @@ const CriarAdvogado: React.FC = () => {
     oab: "",
     estado_oab: "",
   });
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+  const navigate = useNavigate();
   
   const notifications = useNotifications();
 
@@ -34,20 +37,71 @@ const CriarAdvogado: React.FC = () => {
     setAdvogado(response.data);
   }
 
+ const clearFormErrors = () => {
+    setFormErrors({});
+  };
+  
+  const isValidationError = (response: any) => {
+    return response && response.type === "error" && response.response?.errors;
+  };
+  
+  const isSuccessResponse = (response: any) => {
+    return response && response.type === "success";
+  };
+  
+  const handleValidationError = (response: any) => {
+    setFormErrors(response.response.errors);
+    notifications.show('Erros de validação no formulário', {
+      severity: 'error',
+      autoHideDuration: 3000,
+    });
+  };
+  
+  const handleSuccess = () => {
+    notifications.show('Advogado salvo com sucesso!', {
+      severity: 'success',
+      autoHideDuration: 3000,
+    });
+    navigate("/advogados");
+  };
+  
+  const handleUnexpectedError = (error: any) => {
+    console.error(error);
+    notifications.show('Erro inesperado.', {
+      severity: 'error',
+      autoHideDuration: 3000,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-        let response : Response = {message: "", response: {}} ;
-        response = await createAndUpdate("/advogados",  advogado) as Response;
-        if(response.type === "error"){  
-          notifications.show(response.message, {
-            severity: 'error',
-            autoHideDuration: 2000,
-          });
-        }
-        return notifications.show(response?.message, {
-          severity: 'success',
-          autoHideDuration: 2000,
-        });
+    clearFormErrors();
+  
+    const errors = validateForm(advogado);
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      notifications.show('Corrija os erros no formulário.', {
+        severity: 'error',
+        autoHideDuration: 3000,
+      });
+      return;
+    }
+  
+    try {
+      const response = await createAndUpdate("/advogados", advogado);
+  
+      if (isValidationError(response)) {
+        handleValidationError(response);
+        return;
+      }
+  
+      if (isSuccessResponse(response)) {
+        handleSuccess();
+      }
+  
+    } catch (error) {
+      handleUnexpectedError(error);
+    }
   };
 
   useEffect(() => {
@@ -72,8 +126,9 @@ const CriarAdvogado: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
+          error={!!formErrors?.nome}
+          helperText={formErrors?.nome}
         />
         <TextField
           label="OAB"
@@ -82,8 +137,9 @@ const CriarAdvogado: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
+          error={!!formErrors?.oab}
+          helperText={formErrors?.oab}
         />
         <TextField
           label="Estado OAB"
@@ -92,8 +148,9 @@ const CriarAdvogado: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
+          error={!!formErrors?.estado_oab}
+          helperText={formErrors?.estado_oab}
         />
         <Box sx={{ mt: 2 }}>
           <Button variant="contained" color="primary" type="submit">

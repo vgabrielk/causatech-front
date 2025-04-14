@@ -18,7 +18,10 @@ a {
 }
 a:hover {
 }
-
+.css-snvvmu-MuiFormHelperText-root 
+{
+  margin-left: 0!important;
+}
 body {
   margin: 0;
 }

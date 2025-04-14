@@ -1,15 +1,17 @@
-import { Box, Button, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
-import {useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import {  createAndUpdate, Response } from "../../services/createAndUpdate";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import {useNavigate, useParams } from "react-router-dom";
 
 import React, {useEffect, useState } from "react";
 import api from "../../api/api";
+import {  createAndUpdate, Response } from "../../services/createAndUpdate";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { validateForm } from "./validation";
 
 
 
 const CriarCliente: React.FC = () => {
+  const navigate = useNavigate();
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const {id} = useParams();
   const [cliente, setCliente] = useState({
     nome: "",
@@ -22,6 +24,7 @@ const CriarCliente: React.FC = () => {
   
   const notifications = useNotifications()
 
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,21 +41,74 @@ const CriarCliente: React.FC = () => {
     setCliente(response.data);
   }
 
+  const clearFormErrors = () => {
+    setFormErrors({});
+  };
+  
+  const isValidationError = (response: any) => {
+    return response && response.type === "error" && response.response?.errors;
+  };
+  
+  const isSuccessResponse = (response: any) => {
+    return response && response.type === "success";
+  };
+  
+  const handleValidationError = (response: any) => {
+    setFormErrors(response.response.errors);
+    notifications.show('Erros de validação no formulário', {
+      severity: 'error',
+      autoHideDuration: 3000,
+    });
+  };
+  
+  const handleSuccess = () => {
+    notifications.show('Cliente salvo com sucesso!', {
+      severity: 'success',
+      autoHideDuration: 3000,
+    });
+    navigate("/clientes");
+  };
+  
+  const handleUnexpectedError = (error: any) => {
+    console.error(error);
+    notifications.show('Erro inesperado.', {
+      severity: 'error',
+      autoHideDuration: 3000,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-        let response : Response = {message: "", response: {}} ;
-        response = await createAndUpdate("/clientes",  cliente) as Response;
-        if(response.type === "error"){  
-          notifications.show(response.message, {
-            severity: 'error',
-            autoHideDuration: 2000,
-          });
-        }
-        notifications.show(response.message, {
-          severity: 'success',
-          autoHideDuration: 2000,
-        });
+    clearFormErrors();
+  
+    const errors = validateForm(cliente);
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      notifications.show('Corrija os erros no formulário.', {
+        severity: 'error',
+        autoHideDuration: 3000,
+      });
+      return;
+    }
+  
+    try {
+      const response = await createAndUpdate("/clientes", cliente);
+  
+      if (isValidationError(response)) {
+        handleValidationError(response);
+        return;
+      }
+  
+      if (isSuccessResponse(response)) {
+        handleSuccess();
+      }
+  
+    } catch (error) {
+      handleUnexpectedError(error);
+    }
   };
+  
+  
 
   useEffect(() => {
     getCliente()
@@ -76,8 +132,9 @@ const CriarCliente: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
+          error={!!formErrors?.nome}
+          helperText={formErrors?.nome}
         />
         <TextField
           label="CPF"
@@ -86,9 +143,16 @@ const CriarCliente: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
-        />
+          error={!!formErrors?.cpf}
+          helperText={formErrors?.cpf}
+          type="text"
+          slotProps={{
+            htmlInput:
+            {
+              maxLength: 11,
+            }
+          }}        />
          <TextField
           label="Registro geral"
           name="rg"
@@ -96,8 +160,9 @@ const CriarCliente: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
+          error={!!formErrors?.rg}
+          helperText={formErrors?.rg}
         />
          <TextField
           label="Telefone"
@@ -106,9 +171,10 @@ const CriarCliente: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
           type="phone"
+          error={!!formErrors?.telefone}
+          helperText={formErrors?.telefone}
         />
          <TextField
           label="Endereço"
@@ -117,8 +183,9 @@ const CriarCliente: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
+          error={!!formErrors?.endereco}
+          helperText={formErrors?.endereco}
         />
         <TextField
           label="E-mail"
@@ -127,8 +194,9 @@ const CriarCliente: React.FC = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
-          required
           variant="outlined"
+          error={!!formErrors?.email}
+          helperText={formErrors?.email}
         />
         <Box sx={{ mt: 2 }}>
           <Button variant="contained" color="primary" type="submit">

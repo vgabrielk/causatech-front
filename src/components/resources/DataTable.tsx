@@ -28,6 +28,9 @@ export default function DataTable({ columns, endpoint, adjustRow }: DataTablePro
     navigate(`add`);
   };
 
+  const redirectToListPage = () => {
+    navigate(`/`);
+  };
   const getData = async () => {
     setLoading(true);
     try {
