@@ -6,12 +6,14 @@ import {
   IconButton,
   InputAdornment,
   OutlinedInput,
+  TextField,
   Typography
 } from "@mui/material";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAuth } from "../../../context/AuthContext";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -22,11 +24,14 @@ export default function LoginPage() {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const notifications = useNotifications();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => { 
     event.preventDefault();
-    auth.login({ email, password });
-  };
+    
+    auth.clearFormErrors();
 
+    await auth.login({ email, password });  
+  };
   return (
     <Grid container sx={{ height: '100vh', backgroundColor: '#f5f7f9' }}>
       <Grid
@@ -49,31 +54,37 @@ export default function LoginPage() {
               <Typography variant="h5" fontWeight={500} mt={1}>causatech</Typography>
             </Box>
 
-            <OutlinedInput
+            <TextField
               name="email"
               placeholder="Digite seu email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               fullWidth
+              error={!!auth.formErrors?.email}
+              helperText={auth.formErrors?.email}
             />
-            <OutlinedInput
+            <TextField
               name="password"
               placeholder="Digite sua senha"
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               fullWidth
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
+              error={!!auth.formErrors?.password}
+              helperText={auth.formErrors?.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }} 
             />
 
             <Button

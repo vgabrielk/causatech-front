@@ -1,11 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User } from "../interfaces/User";
 import api from "../api/api";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (user: User) => void;
   logout: () => void;
+  formErrors: {
+    email?: string;  
+    password?: string;
+  };
+  clearFormErrors: () => void;
 }
 
 interface AuthProviderProps {
@@ -15,16 +21,23 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const notifications = useNotifications();
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     const storedAuth = localStorage.getItem("auth");
     return storedAuth === "true";
   });
+
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+  const [generalError, setGeneralError] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.setItem("auth", String(isAuthenticated));
   }, [isAuthenticated]);
 
   const login = async (user: User) => {
+    
+    clearFormErrors();
     if(!user){
       return;
     }
@@ -37,19 +50,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      setTimeout(() => {
-        if (response.status == 200) {
-          return (window.location.href = "/");
-        }
-      }, 1000);
+
       setIsAuthenticated(true);
       localStorage.setItem("auth", "true");
 
-      return;
+      return  notifications.show('Logado com sucesso!', {
+        severity: "success",
+        autoHideDuration: 1500,
+      });;
     } catch (error) {
-      return error;
+      const errors = (error as any)?.response?.data?.error;
+
+      if (typeof errors === "string") {
+        notifications.show(errors || "Erro ao fazer login. Tente novamente.", {
+          severity: "error",
+          autoHideDuration: 1500,
+        });
+      } else {
+        setFormErrors(errors); 
+      }
+      return { general: "Erro ao fazer login. Tente novamente." };
     }
-  };
+  }
 
   const logout = async () => {
     await api.post('/logout');
@@ -57,16 +79,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem("auth");
     window.location.href=""
   };
+  const clearFormErrors = () => {
+    setGeneralError('');
+    setFormErrors({});
+  };
 
-  // const auth = useAuth();
-  // const logout = () => api.post('/logout');
-  // useEffect( () => {
-  //    logout()
-  //    auth.logout();
-  //    window.location.href=""
-  // },[])
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, formErrors, clearFormErrors }}>
       {children}
     </AuthContext.Provider>
   );

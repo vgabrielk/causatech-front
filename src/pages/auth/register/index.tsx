@@ -6,6 +6,7 @@ import {
   IconButton,
   InputAdornment,
   OutlinedInput,
+  TextField,
   Typography
 } from "@mui/material";
 import { useState } from "react";
@@ -13,6 +14,7 @@ import api from "../../../api/api";
 import { Link, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNotifications } from "@toolpad/core/useNotifications";
+import { validateRegister } from "./validation";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -24,7 +26,9 @@ export default function RegisterPage() {
   const notifications = useNotifications();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault(); 
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+
 
   const register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,22 +48,7 @@ export default function RegisterPage() {
     } catch (error) {
       const errors = (error as any)?.response?.data?.errors;
       if (errors) {
-        Object.keys(errors).forEach((field) => {
-          notifications.show(errors[field], {
-            severity: 'error',
-            autoHideDuration: 2000,
-          });
-        });
-      } else {
-        const errorMessage =
-          (error as any)?.response?.data?.error ||
-          (error as any)?.message ||
-          "Erro inesperado";
-
-        notifications.show(errorMessage, {
-          severity: 'error',
-          autoHideDuration: 2000,
-        });
+        setFormErrors(errors);
       }
     }
   };
@@ -74,7 +63,6 @@ export default function RegisterPage() {
         <Card sx={{ width: 360, p: 4, boxShadow: 3, borderRadius: 2 }}>
           <Box component="form" onSubmit={register} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Box sx={{ textAlign: 'center', mb: 2 }}>
-              {/* Logo fictícia ou substitua por <img src="logo.png" /> */}
               <Box
                 sx={{
                   width: 40,
@@ -87,41 +75,51 @@ export default function RegisterPage() {
               <Typography variant="h5" fontWeight={500} mt={1}>causatech</Typography>
             </Box>
 
-            <OutlinedInput
-              required
+            <TextField
+              
               name="name"
               placeholder="Digite seu nome"
               value={name}
               onChange={(e) => setName(e.target.value)}
               fullWidth
+              error={!!formErrors?.name}
+              helperText={formErrors?.name}
+
+
             />
-            <OutlinedInput
-              required
+            <TextField
+              
               name="email"
               placeholder="Digite seu e-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              error={!!formErrors?.email}
+              helperText={formErrors?.email}
+
+
               fullWidth
             />
-            <OutlinedInput
-              required
+            <TextField
               name="password"
               placeholder="Digite sua senha"
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              fullWidth
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
+              error={!!formErrors?.password}
+              helperText={formErrors?.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }} 
             />
 
             <Button
