@@ -45,7 +45,7 @@ export const childrenRoutes = [
     segment: "admin", 
     kind: "admin", 
     title: "Administrativo", 
-    showInSidebar: user.roles.some(role => role.name === "admin"),
+    showInSidebar: user?.roles?.some((role: any) => role.name === "admin"),
     icon: <AdminPanelSettings fontSize="large" color="primary" />,
     children: [
       { 
