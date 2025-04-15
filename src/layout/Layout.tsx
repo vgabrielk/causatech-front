@@ -26,8 +26,9 @@ export default function DashboardLayoutBasic(props: any) {
 
   const demoSession = {
     user: {
-      name: user?.email,
+      name: user?.name,
       image: 'https://avatars.githubusercontent.com/u/19550456',
+      email: user?.email,
     },
   };
 

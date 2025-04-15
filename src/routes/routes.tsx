@@ -9,7 +9,7 @@ import CriarContrato from "../pages/contratos/create";
 import NotFound from "../pages/not-found";
 import { AdminPanelSettings, DocumentScannerRounded, EmojiPeople, Gavel, HomeRounded, LogoutRounded, Person, Search } from "@mui/icons-material";
 import { useAuth } from "../context/AuthContext";  
-import React from "react";
+import React, { use } from "react";
 import Logout from "../pages/logout";
 import RegisterPage from "../pages/auth/register";
 import Clientes from "../pages/clientes";
@@ -29,6 +29,8 @@ const PublicRoute = ({ element }: { element: React.ReactNode }) => {
   return isAuthenticated ? <Navigate to="/" replace /> : element;
 };
 
+const user = JSON.parse(localStorage.getItem('user') as string)
+
 export const childrenRoutes = [
   { 
     segment: "", 
@@ -43,7 +45,7 @@ export const childrenRoutes = [
     segment: "admin", 
     kind: "admin", 
     title: "Administrativo", 
-    showInSidebar: true, 
+    showInSidebar: user.roles[0].name === "admin", 
     icon: <AdminPanelSettings fontSize="large" color="primary" />,
     children: [
       { 
@@ -94,6 +96,7 @@ export const childrenRoutes = [
   { path: "/consultar", element: <ProtectedRoute element={<ConsultarProcessos />} />, title: "Consultar processos", showInSidebar: true, segment: 'consultar', kind: 'consultar', icon: <Search fontSize="large" color="primary" /> },
   { path: "/contratos/add", element: <ProtectedRoute element={<CriarContrato />} />, title: "Criar Contrato" },
   { path: "/contratos/edit/:id", element: <ProtectedRoute element={<CriarContrato />} />, title: "Editar Contrato" },
+
 
   // { Processos
   //   segment: "processos", 

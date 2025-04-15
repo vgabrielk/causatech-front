@@ -1,4 +1,5 @@
 import axios from 'axios'; 
+import { useAuth } from '../context/AuthContext';
 
 
 const bearerToken = localStorage.getItem('token')
@@ -24,8 +25,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use((response) => {
   return response;
 }, (error) => {
-  if (error.response && error.response.status === 401) {
+  console.log(error)
+  if (error.response && error.status === 401) {
     console.error('Não autorizado, faça login novamente.');
+    localStorage.clear();
+    window.location.href = '/login';
+    return Promise.reject(error);
   }
   return Promise.reject(error);
 });

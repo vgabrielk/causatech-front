@@ -36,42 +36,42 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [isAuthenticated]);
 
   const login = async (user: User) => {
-    
     clearFormErrors();
-    if(!user){
-      return;
-    }
+    if (!user) return;
     try {
       const response = await api.post("/login", {
         email: user.email,
         password: user.password,
       });
-      console.log(response);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-
-      setIsAuthenticated(true);
+  
+      const token = response.data.token;
+      const userData = response.data.user;
+      
+      localStorage.setItem("token", token);
       localStorage.setItem("auth", "true");
 
-      return  notifications.show('Logado com sucesso!', {
+      localStorage.setItem("user", JSON.stringify(userData));
+  
+      setIsAuthenticated(true);
+  
+      notifications.show("Logado com sucesso!", {
         severity: "success",
         autoHideDuration: 1500,
-      });;
+      });
     } catch (error) {
       const errors = (error as any)?.response?.data?.error;
-
+  
       if (typeof errors === "string") {
         notifications.show(errors || "Erro ao fazer login. Tente novamente.", {
           severity: "error",
           autoHideDuration: 1500,
         });
       } else {
-        setFormErrors(errors); 
+        setFormErrors(errors);
       }
       return { general: "Erro ao fazer login. Tente novamente." };
     }
-  }
+  };
 
   const logout = async () => {
     await api.post('/logout');
